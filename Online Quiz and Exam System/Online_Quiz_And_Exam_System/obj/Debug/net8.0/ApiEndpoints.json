@@ -1,0 +1,86 @@
+[
+  {
+    "ContainingType": "Online_Quiz_And_Exam_System.Controllers.RootController",
+    "Method": "Get",
+    "RelativePath": "",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Online_Quiz_And_Exam_System.Controllers.AuthController",
+    "Method": "Login",
+    "RelativePath": "api/auth/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "u",
+        "Type": "Online_Quiz_And_Exam_System.Models.User",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Online_Quiz_And_Exam_System.Controllers.AuthController",
+    "Method": "Register",
+    "RelativePath": "api/auth/register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "u",
+        "Type": "Online_Quiz_And_Exam_System.Models.User",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Online_Quiz_And_Exam_System.Controllers.ModuleController",
+    "Method": "GetModules",
+    "RelativePath": "api/modules",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Online_Quiz_API.Controllers.QuizController",
+    "Method": "Start",
+    "RelativePath": "api/quiz/{moduleId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "moduleId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Online_Quiz_And_Exam_System.Controllers.ResultController",
+    "Method": "SaveResult",
+    "RelativePath": "api/result/save",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "r",
+        "Type": "Online_Quiz_And_Exam_System.Models.TestResult",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]
