@@ -38,12 +38,12 @@ function Dashboard() {
       <h3>
         Welcome, {user.fullName}{" "}
         <span className="text-muted fs-6">
-          (UserID: {user.email})
+          (UserID: {user.userId})
         </span>
       </h3>
-      <p className="text-muted">
+      {/* <p className="text-muted">
         Course: CDAC DAC, Last Login: {stats.lastLogin}
-      </p>
+      </p> */}
 
       {/* ================= TOP CARDS ================= */}
       <div className="row g-4">
