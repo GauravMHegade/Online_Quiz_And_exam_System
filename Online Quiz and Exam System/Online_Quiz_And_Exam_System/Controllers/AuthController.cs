@@ -32,5 +32,25 @@ namespace Online_Quiz_And_Exam_System.Controllers
             _dal.Register(u);
             return Ok("User registered successfully");
         }
+
+
+        [HttpPost("google")]
+        public IActionResult GoogleLogin(User user)
+        {
+            var existingUser = _dal.GetUserByEmail(user.Email);
+
+            if (existingUser != null)
+                return Ok(existingUser);
+
+            // New Google user → register
+            _dal.RegisterGoogleUser(user);
+
+            var newUser = _dal.GetUserByEmail(user.Email);
+            return Ok(newUser);
+        }
+
+
+
+
     }
 }

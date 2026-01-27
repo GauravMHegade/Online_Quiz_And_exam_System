@@ -15,11 +15,42 @@ namespace Online_Quiz_And_Exam_System.Controllers
             _dal = dal;
         }
 
-        [HttpPost("save")]
-        public IActionResult SaveResult([FromBody] TestResult r)
+        [HttpPost]
+        public IActionResult Save([FromBody] TestResult r)
         {
-            _dal.SaveResult(r);
-            return Ok("Result saved successfully");
+            try
+            {
+                if (r == null)
+                    return BadRequest("Request body is null");
+
+                _dal.Save(r);
+                return Ok("Saved successfully");
+            }
+            catch (Exception ex)
+            {
+                // THIS LINE IS CRITICAL
+                return BadRequest(ex.Message);
+            }
         }
+
+
+
+
+        [HttpGet("attempts/{userId}")]
+        public IActionResult GetAttempts(int userId)
+        {
+            return Ok(_dal.GetAttemptSummary(userId));
+        }
+
+
+
+        [HttpGet("latest/{userId}")]
+        public IActionResult Latest(int userId)
+        {
+            return Ok(_dal.GetLatestStats(userId));
+        }
+
+
+
     }
 }

@@ -10,33 +10,70 @@ function Home() {
     getModules().then(setModules);
   }, []);
 
-  const openModule = (id) => {
+  const ensureLogin = () => {
     const user = sessionStorage.getItem("user");
-    if (!user) nav("/login");
-    else nav(`/quiz/${id}`);
+    if (!user) {
+      nav("/login");
+      return false;
+    }
+    return true;
   };
 
   return (
     <div className="container mt-4">
-      <h2 className="text-center mb-4">CDAC DAC – Online Quiz</h2>
+
+      <h2 className="text-center mb-4">
+        CDAC DAC – Online Quiz & Mock Tests
+      </h2>
 
       <div className="row">
         {modules.map(m => (
-          <div className="col-md-4 mb-3" key={m.moduleId}>
-            <div className="card h-100">
+          <div className="col-md-4 mb-4" key={m.moduleId}>
+            <div className="card h-100 shadow-sm">
+
               <div className="card-body text-center">
-                <h5 className="card-title">{m.moduleName}</h5>
+
+                <h5 className="card-title mb-3">
+                  {m.moduleName}
+                </h5>
+
+                {/* ================= PRACTICE TEST ================= */}
                 <button
-                  className="btn btn-success"
-                  onClick={() => openModule(m.moduleId)}
+                  className="btn btn-success w-100 mb-2"
+                  onClick={() => {
+                    if (ensureLogin()) {
+                      nav(`/quiz/${m.moduleId}`);
+                    }
+                  }}
                 >
-                  Start Test
+                  Practice Test (Learning Mode)
                 </button>
+
+                <hr />
+
+                {/* ================= MOCK TESTS ================= */}
+                <h6 className="mb-2">Mock Tests</h6>
+
+                {[1, 2, 3, 4, 5].map(mockId => (
+                  <button
+                    key={mockId}
+                    className="btn btn-outline-primary btn-sm m-1"
+                    onClick={() => {
+                      if (ensureLogin()) {
+                        nav(`/mock/${m.moduleId}/${mockId}`);
+                      }
+                    }}
+                  >
+                    Mock {mockId}
+                  </button>
+                ))}
+
               </div>
             </div>
           </div>
         ))}
       </div>
+
     </div>
   );
 }

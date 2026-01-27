@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../services/api";
+import { googleLogin } from "../services/api";
+
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const nav = useNavigate(); 
+  const nav = useNavigate();
 
   // ================= NORMAL LOGIN =================
   const submit = async () => {
@@ -44,22 +46,22 @@ function Login() {
     }
   }, []);
 
-  const handleGoogleLogin = (response) => {
-    // Decode JWT token sent by Google
+  const handleGoogleLogin = async (response) => {
     const userObject = JSON.parse(
       atob(response.credential.split(".")[1])
     );
 
     const googleUser = {
-      userId: userObject.sub,       // unique Google ID
       fullName: userObject.name,
       email: userObject.email
     };
 
-    // Store Google user locally (project/demo level)
-    sessionStorage.setItem("user", JSON.stringify(googleUser));
+    const savedUser = await googleLogin(googleUser);
+
+    sessionStorage.setItem("user", JSON.stringify(savedUser));
     nav("/");
   };
+
 
   return (
     <div className="container mt-5">

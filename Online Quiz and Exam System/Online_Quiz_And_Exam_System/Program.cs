@@ -1,4 +1,4 @@
-﻿
+﻿using Online_Quiz_And_Exam_System.DAL;
 using Online_Quiz_API.DAL;
 
 namespace Online_Quiz_And_Exam_System
@@ -11,6 +11,7 @@ namespace Online_Quiz_And_Exam_System
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddControllers();
+
             builder.Services.AddCors(o =>
                 o.AddPolicy("react", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod())
             );
@@ -20,6 +21,8 @@ namespace Online_Quiz_And_Exam_System
             builder.Services.AddScoped<ModuleDAL>();
             builder.Services.AddScoped<QuestionDAL>();
             builder.Services.AddScoped<ResultDAL>();
+            builder.Services.AddScoped<MockDAL>();
+
 
             var app = builder.Build();
 

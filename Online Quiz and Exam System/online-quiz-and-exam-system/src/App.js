@@ -5,6 +5,7 @@ import Quiz from "./pages/Quiz";
 import Dashboard from "./pages/Dashboard";
 import Navbar from "./components/Navbar";
 import Register from "./pages/Register";
+import MockQuiz from "./pages/MockQuiz";
 
 
 function App() {
@@ -17,6 +18,8 @@ function App() {
         <Route path="/quiz/:moduleId" element={<Quiz />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/mock/:moduleId/:mockNumber" element={<MockQuiz />} />
+
       </Routes>
     </BrowserRouter>
   );

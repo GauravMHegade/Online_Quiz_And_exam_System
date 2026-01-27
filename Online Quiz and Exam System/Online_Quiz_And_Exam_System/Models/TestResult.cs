@@ -10,6 +10,12 @@
         public int Score { get; set; }
         public DateTime TestDate { get; set; }
         public int ResultId { get; internal set; }
+        public int Attempted { get; set; }
+        public int Unattempted { get; set; }
+        public string? TestType { get; set; }
+
+
+
     }
 
 }

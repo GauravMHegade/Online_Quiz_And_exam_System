@@ -1,48 +1,67 @@
 import { useEffect, useState, useRef } from "react";
-import { getQuestions, saveResult } from "../services/api";
 import { useParams, useNavigate } from "react-router-dom";
+import { getMockQuestions, saveResult } from "../services/api";
 
-function Quiz() {
-  const { moduleId } = useParams();
-  const nav = useNavigate();
+function MockQuiz() {
+  const { moduleId, mockNumber } = useParams();
+  const navigate = useNavigate();
 
   // ================= STATE =================
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
   const [current, setCurrent] = useState(0);
+  const [time, setTime] = useState(3600); // 60 minutes
 
-  // 🔑 REF TO ALWAYS HOLD LATEST ANSWERS
   const answersRef = useRef({});
+  const timerRef = useRef(null);
 
   const user = JSON.parse(sessionStorage.getItem("user"));
 
-  // ================= KEEP REF UPDATED =================
+  // ================= KEEP ANSWERS REF UPDATED =================
   useEffect(() => {
     answersRef.current = answers;
   }, [answers]);
 
-  // ================= LOAD QUESTIONS =================
+  // ================= LOAD MOCK QUESTIONS =================
   useEffect(() => {
-    getQuestions(moduleId).then(setQuestions);
-  }, [moduleId]);
+    getMockQuestions(moduleId, mockNumber)
+      .then(setQuestions)
+      .catch(() => alert("Failed to load mock test questions"));
+  }, [moduleId, mockNumber]);
 
-  // ================= CLEAR ANSWER =================
-  const clearAnswer = () => {
-    const copy = { ...answers };
-    delete copy[current];
-    setAnswers(copy);
+  // ================= START TIMER AFTER QUESTIONS LOAD =================
+  useEffect(() => {
+    if (questions.length === 0) return;
+
+    timerRef.current = setInterval(() => {
+      setTime(prev => {
+        if (prev <= 1) {
+          clearInterval(timerRef.current);
+          autoSubmit();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timerRef.current);
+  }, [questions]);
+
+  // ================= AUTO SUBMIT =================
+  const autoSubmit = async () => {
+    alert("Time is over. Mock test will be submitted automatically.");
+    await submitTest(true);
   };
 
-  // ================= SUBMIT TEST =================
-  const submitTestInternal = async (isAuto = false) => {
+  // ================= SUBMIT =================
+  const submitTest = async (isAuto = false) => {
     const latestAnswers = answersRef.current;
-
     const attempted = Object.keys(latestAnswers).length;
     const unattempted = questions.length - attempted;
 
     if (!isAuto && unattempted > 0) {
       const confirmSubmit = window.confirm(
-        `You have ${unattempted} unattempted questions.\nDo you want to submit?`
+        `You have ${unattempted} unattempted questions.\nDo you want to submit the mock test?`
       );
       if (!confirmSubmit) return;
     }
@@ -57,25 +76,27 @@ function Quiz() {
       }
     });
 
-
     await saveResult({
-      UserId: user.userId,
-      ModuleId: moduleId,
-      Score: score,
-      Attempted: attempted,
-      Unattempted: unattempted,
-      TestType: "Practice"
+      userId: user.userId,
+      moduleId,
+      score,
+      testType: "MOCK",
+      mockNumber
     });
 
-
     sessionStorage.setItem("score", score);
-    nav("/dashboard");
+    navigate("/dashboard");
   };
 
-  // ================= LOADING =================
-  if (questions.length === 0) {
-    return <h4 className="text-center">Loading...</h4>;
-  }
+  // ================= CLEAR ANSWER =================
+  const clearAnswer = () => {
+    const copy = { ...answers };
+    delete copy[current];
+    setAnswers(copy);
+  };
+
+  if (questions.length === 0)
+    return <h4 className="text-center mt-5">Loading...</h4>;
 
   const q = questions[current];
   const attemptedCount = Object.keys(answers).length;
@@ -85,9 +106,12 @@ function Quiz() {
     <div className="container-fluid mt-3">
 
       {/* ================= HEADER ================= */}
-      <div className="mb-3 px-3">
+      <div className="d-flex justify-content-between align-items-center mb-3 px-3">
         <h5>Welcome, {user.fullName}</h5>
-        <p className="text-muted">Practice Test</p>
+        <h5 className="text-danger">
+          Time Left: {Math.floor(time / 60)}:
+          {String(time % 60).padStart(2, "0")}
+        </h5>
       </div>
 
       <div className="row">
@@ -96,7 +120,7 @@ function Quiz() {
         <div className="col-md-9">
           <div className="card p-4">
             <h5>
-              Question {current + 1} of {questions.length}
+              Mock Test {mockNumber} – Question {current + 1} of {questions.length}
             </h5>
 
             <p className="mt-3">{q.questionText}</p>
@@ -119,7 +143,7 @@ function Quiz() {
             ))}
           </div>
 
-          {/* ================= NAV BUTTONS ================= */}
+          {/* ================= NAVIGATION ================= */}
           <div className="d-flex justify-content-between mt-3">
 
             <button
@@ -148,7 +172,7 @@ function Quiz() {
 
             <button
               className="btn btn-danger"
-              onClick={() => submitTestInternal(false)}
+              onClick={() => submitTest(false)}
             >
               Submit Test
             </button>
@@ -165,8 +189,9 @@ function Quiz() {
               {questions.map((_, i) => (
                 <button
                   key={i}
-                  className={`btn btn-sm m-1 ${answers[i] ? "btn-success" : "btn-outline-danger"
-                    }`}
+                  className={`btn btn-sm m-1 ${
+                    answers[i] ? "btn-success" : "btn-outline-danger"
+                  }`}
                   onClick={() => setCurrent(i)}
                 >
                   {i + 1}
@@ -176,47 +201,36 @@ function Quiz() {
 
             <hr />
 
-            <div className="mt-3">
-
-              {/* Attempted */}
-              <div className="mb-2">
-                <div className="d-flex justify-content-between">
-                  <small><b>Attempted</b></small>
-                  <small>{attemptedCount}</small>
-                </div>
-
-                <div className="progress" style={{ height: "22px" }}>
-                  <div
-                    className="progress-bar bg-success"
-                    style={{
-                      width: `${(attemptedCount / questions.length) * 100}%`
-                    }}
-                  >
-                    {attemptedCount}
-                  </div>
+            {/* Attempted */}
+            <div className="mb-2">
+              <small><b>Attempted</b></small>
+              <div className="progress" style={{ height: "20px" }}>
+                <div
+                  className="progress-bar bg-success"
+                  style={{
+                    width: `${(attemptedCount / questions.length) * 100}%`
+                  }}
+                >
+                  {attemptedCount}
                 </div>
               </div>
-
-              {/* Unattempted */}
-              <div>
-                <div className="d-flex justify-content-between">
-                  <small><b>Unattempted</b></small>
-                  <small>{unattemptedCount}</small>
-                </div>
-
-                <div className="progress" style={{ height: "22px" }}>
-                  <div
-                    className="progress-bar bg-danger"
-                    style={{
-                      width: `${(unattemptedCount / questions.length) * 100}%`
-                    }}
-                  >
-                    {unattemptedCount}
-                  </div>
-                </div>
-              </div>
-
             </div>
+
+            {/* Unattempted */}
+            <div>
+              <small><b>Unattempted</b></small>
+              <div className="progress" style={{ height: "20px" }}>
+                <div
+                  className="progress-bar bg-danger"
+                  style={{
+                    width: `${(unattemptedCount / questions.length) * 100}%`
+                  }}
+                >
+                  {unattemptedCount}
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
 
@@ -225,4 +239,4 @@ function Quiz() {
   );
 }
 
-export default Quiz;
+export default MockQuiz;
