@@ -53,5 +53,18 @@ namespace Online_Quiz_And_Exam_System.Controllers
 
             return Ok(result);
         }
+
+
+
+        [HttpGet("check-mock")]
+        public IActionResult CheckMockAttempt(
+            int userId,
+            int moduleId,
+            int mockNo)
+        {
+            bool attempted = _dal.HasAttemptedMock(userId, moduleId, mockNo);
+            return Ok(new { attempted });
+        }
+
     }
 }

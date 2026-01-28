@@ -13,6 +13,7 @@
         public int Attempted { get; set; }
         public int Unattempted { get; set; }
         public string? TestType { get; set; }
+        public int? MockNo { get; set; }
 
 
 

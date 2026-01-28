@@ -1,8 +1,9 @@
 ﻿using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 using Online_Quiz_And_Exam_System.Models;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
 
 
 namespace Online_Quiz_API.DAL
@@ -17,26 +18,36 @@ namespace Online_Quiz_API.DAL
         }
 
         // ================= SAVE RESULT =================
-        public void Save(TestResult r)
+        public void Save(TestResult result)
         {
-            using var conn = _db.GetConnection();
+            using SqlConnection con = _db.GetConnection();
+            using SqlCommand cmd = new SqlCommand();
 
-            var cmd = new SqlCommand(@"
-                INSERT INTO TestResults
-                (UserId, ModuleId, Score, Attempted, Unattempted, TestType)
-                VALUES
-                (@uid, @mid, @score, @att, @unatt, @type)", conn);
+            cmd.Connection = con;
+            cmd.CommandText =
+                @"INSERT INTO TestResults
+          (UserId, ModuleId, Score, Attempted, Unattempted, TestType, MockNo)
+          VALUES
+          (@uid, @mid, @score, @attempted, @unattempted, @type, @mockNo)";
 
-            cmd.Parameters.AddWithValue("@uid", r.UserId);
-            cmd.Parameters.AddWithValue("@mid", r.ModuleId);
-            cmd.Parameters.AddWithValue("@score", r.Score);
-            cmd.Parameters.AddWithValue("@att", r.Attempted);
-            cmd.Parameters.AddWithValue("@unatt", r.Unattempted);
-            cmd.Parameters.AddWithValue("@type", r.TestType);
+            cmd.Parameters.Add("@uid", SqlDbType.Int).Value = result.UserId;
+            cmd.Parameters.Add("@mid", SqlDbType.Int).Value = result.ModuleId;
+            cmd.Parameters.Add("@score", SqlDbType.Int).Value = result.Score;
+            cmd.Parameters.Add("@attempted", SqlDbType.Int).Value = result.Attempted;
+            cmd.Parameters.Add("@unattempted", SqlDbType.Int).Value = result.Unattempted;
+            cmd.Parameters.Add("@type", SqlDbType.NVarChar, 20).Value = result.TestType;
 
-            conn.Open();
+            // 🔑 THIS LINE PREVENTS THE ERROR
+            cmd.Parameters.Add("@mockNo", SqlDbType.Int).Value =
+                result.TestType == "Mock"
+                    ? result.MockNo
+                    : DBNull.Value;
+
+            con.Open();
             cmd.ExecuteNonQuery();
         }
+
+
 
         // ================= ATTEMPT SUMMARY =================
         public List<object> GetAttemptSummary(int userId)
@@ -110,5 +121,29 @@ namespace Online_Quiz_API.DAL
                 bestScore = dr["BestScore"]
             };
         }
+
+
+
+
+        public bool HasAttemptedMock(int userId, int moduleId, int mockNo)
+        {
+            using SqlConnection con = _db.GetConnection();
+            SqlCommand cmd = new SqlCommand(
+                @"SELECT COUNT(*) 
+          FROM TestResults
+          WHERE UserId = @uid
+            AND ModuleId = @mid
+            AND TestType = 'Mock'
+            AND MockNo = @mockNo", con);
+
+            cmd.Parameters.AddWithValue("@uid", userId);
+            cmd.Parameters.AddWithValue("@mid", moduleId);
+            cmd.Parameters.AddWithValue("@mockNo", mockNo);
+
+            con.Open();
+            int count = (int)cmd.ExecuteScalar();
+            return count > 0;
+        }
+
     }
 }

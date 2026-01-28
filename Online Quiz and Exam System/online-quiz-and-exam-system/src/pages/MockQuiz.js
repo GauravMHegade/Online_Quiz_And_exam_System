@@ -83,7 +83,8 @@ await saveResult({
   score,
   attempted,
   unattempted,
-  testType: "Mock"   // ✅ THIS IS THE DIFFERENCE
+  testType: "Mock",   // ✅ THIS IS THE DIFFERENCE
+  mockNo: parseInt(mockNumber)
 });
 
 
@@ -138,6 +139,7 @@ await saveResult({
                   type="radio"
                   name={`q${current}`}
                   checked={answers[current] === opt}
+                  
                   onChange={() =>
                     setAnswers({ ...answers, [current]: opt })
                   }

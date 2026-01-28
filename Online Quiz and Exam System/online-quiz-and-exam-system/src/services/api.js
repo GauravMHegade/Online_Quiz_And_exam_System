@@ -35,16 +35,21 @@ export async function saveResult(result) {
       score: result.score,
       attempted: result.attempted,
       unattempted: result.unattempted,
-      testType: result.testType   // ✅ MUST BE HERE
+      testType: result.testType,
+
+      // ✅ ALWAYS SEND mockNo
+      mockNo: result.testType === "Mock"
+        ? result.mockNo
+        : null
     })
   });
 
   if (!res.ok) {
     const error = await res.text();
-    console.error("BACKEND ERROR:", error);
     throw new Error(error);
   }
 }
+
 
 
 
@@ -122,4 +127,12 @@ export async function getLatestResultStats(userId) {
   // ✅ Safe to parse JSON now
   return await res.json();
 }
+
+
+export const checkMockAttempt = (userId, moduleId, mockNo) => {
+  return fetch(
+    `http://localhost:52705/api/result/check-mock?userId=${userId}&moduleId=${moduleId}&mockNo=${mockNo}`
+  ).then(res => res.json());
+};
+
 

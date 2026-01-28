@@ -1,0 +1,35 @@
+/* Module card */
+.module-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  height: 100%;
+}
+
+.module-title {
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+/* Mock section */
+.mock-title {
+  text-align: center;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.mock-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* 🔒 BLUR FOR LOGGED-OUT USERS */
+.blur-disabled {
+  filter: blur(2px);
+  opacity: 0.6;
+  pointer-events: none; /* disables click */
+}

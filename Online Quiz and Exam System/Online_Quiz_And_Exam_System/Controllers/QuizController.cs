@@ -20,5 +20,16 @@ namespace Online_Quiz_API.Controllers
             var questions = _dal.GetRandomQuestions(moduleId);
             return Ok(questions);
         }
+
+
+        [HttpGet("demo/{moduleId}")]
+        public IActionResult DemoPractice(int moduleId)
+        {
+            var questions = _dal.GetDemoQuestions(moduleId);
+            return Ok(questions);
+        }
+
+
+
     }
 }

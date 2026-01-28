@@ -9,6 +9,7 @@ import MockQuiz from "./pages/MockQuiz";
 import "./App.css";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import DemoQuiz from "./pages/DemoQuiz";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/mock/:moduleId/:mockNumber" element={<MockQuiz />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/demo/:moduleId" element={<DemoQuiz />} />
         </Routes>
       </div>
     </BrowserRouter>
