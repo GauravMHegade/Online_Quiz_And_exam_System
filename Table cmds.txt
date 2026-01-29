@@ -1,0 +1,70 @@
+CREATE TABLE [dbo].[Modules] (
+    [ModuleId]   INT           IDENTITY (1, 1) NOT NULL,
+    [ModuleName] VARCHAR (100) NULL,
+    PRIMARY KEY CLUSTERED ([ModuleId] ASC)
+);
+
+
+
+
+CREATE TABLE [dbo].[Questions] (
+    [QuestionId]    INT           IDENTITY (1, 1) NOT NULL,
+    [ModuleId]      INT           NULL,
+    [QuestionText]  VARCHAR (MAX) NULL,
+    [OptionA]       VARCHAR (200) NULL,
+    [OptionB]       VARCHAR (200) NULL,
+    [OptionC]       VARCHAR (200) NULL,
+    [OptionD]       VARCHAR (200) NULL,
+    [CorrectOption] CHAR (1)      NULL,
+    PRIMARY KEY CLUSTERED ([QuestionId] ASC),
+    FOREIGN KEY ([ModuleId]) REFERENCES [dbo].[Modules] ([ModuleId])
+);
+
+
+
+
+
+CREATE TABLE [dbo].[TestResults] (
+    [ResultId]    INT          IDENTITY (1, 1) NOT NULL,
+    [UserId]      INT          NULL,
+    [ModuleId]    INT          NULL,
+    [Score]       INT          NULL,
+    [TestDate]    DATETIME     NULL,
+    [Attempted]   INT          DEFAULT ((0)) NOT NULL,
+    [Unattempted] INT          DEFAULT ((0)) NOT NULL,
+    [TestType]    VARCHAR (20) DEFAULT ('Practice') NOT NULL,
+    [MockNo]      INT          NULL,
+    PRIMARY KEY CLUSTERED ([ResultId] ASC)
+);
+
+
+
+
+
+
+CREATE TABLE [dbo].[Tests] (
+    [TestId]   INT      IDENTITY (1, 1) NOT NULL,
+    [UserId]   INT      NULL,
+    [ModuleId] INT      NULL,
+    [Score]    INT      NULL,
+    [TestDate] DATETIME DEFAULT (getdate()) NULL,
+    PRIMARY KEY CLUSTERED ([TestId] ASC)
+);
+
+
+
+
+
+
+
+CREATE TABLE [dbo].[Users] (
+    [UserId]       INT           IDENTITY (1, 1) NOT NULL,
+    [FullName]     VARCHAR (100) NULL,
+    [Email]        VARCHAR (100) NULL,
+    [Password]     VARCHAR (100) NULL,
+    [CreatedAt]    DATETIME      DEFAULT (getdate()) NULL,
+    [MobileNumber] VARCHAR (15)  NULL,
+    PRIMARY KEY CLUSTERED ([UserId] ASC),
+    UNIQUE NONCLUSTERED ([Email] ASC)
+);
+

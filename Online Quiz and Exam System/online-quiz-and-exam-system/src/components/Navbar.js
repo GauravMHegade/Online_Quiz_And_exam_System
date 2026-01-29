@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import "./Navbar.css";
-import logo from "../logos/Horizontal_logo-removebg-preview.png";
+import logo from "../logos/Horizontal_logo-removebg-preview-white (1).png";
 
 function Navbar() {
   const nav = useNavigate();

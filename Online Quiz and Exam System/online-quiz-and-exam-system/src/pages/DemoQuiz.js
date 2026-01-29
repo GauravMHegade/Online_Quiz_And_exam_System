@@ -61,7 +61,7 @@ function DemoQuiz() {
             Score: {result.score} / {result.total}
           </h4>
 
-          <p className="text-warning mt-3 fs-5">
+          <p className="text-dark mt-3 fs-5">
             🔒 Please login to access full practice tests and mock exams.
           </p>
 

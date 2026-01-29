@@ -10,7 +10,7 @@ namespace Online_Quiz_And_Exam_System.Controllers
     {
         private readonly UserDAL _dal;
 
-        public AuthController(UserDAL dal)
+        public AuthController(UserDAL dal)          
         {
             _dal = dal;
         }
