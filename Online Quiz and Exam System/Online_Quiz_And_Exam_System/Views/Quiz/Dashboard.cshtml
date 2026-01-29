@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "Result Dashboard";
+}
+
+<h2>📊 Test Performance Dashboard</h2>
+
+<hr />
+
+<table border="1" cellpadding="10">
+    <tr>
+        <th>Total Questions</th>
+        <td>@ViewBag.Total</td>
+    </tr>
+    <tr>
+        <th>Correct Answers</th>
+        <td>@ViewBag.Correct</td>
+    </tr>
+    <tr>
+        <th>Score Percentage</th>
+        <td>@ViewBag.Percentage %</td>
+    </tr>
+    <tr>
+        <th>Performance</th>
+        <td><b>@ViewBag.Remark</b></td>
+    </tr>
+</table>
+
+<br />
+
+<!-- ACTION BUTTONS -->
+<a href="/Quiz/Retake" class="btn">🔁 Retake Test</a>
+&nbsp;&nbsp;
+<a href="/Home/Index" class="btn">🏠 Back to Home</a>
+
+<style>
+    .btn {
+        padding: 10px 15px;
+        background-color: #2c7be5;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+</style>

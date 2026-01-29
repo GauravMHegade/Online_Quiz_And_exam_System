@@ -1693,11 +1693,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\CDAC IET\\Project\\Online Quiz and Exam System\\Online_Quiz_And_Exam_System\\Online_Quiz_And_Exam_System.csproj",
+      "projectUniqueName": "D:\\CDAC IET\\DOTNET\\Lab\\ADO.NET\\Online Quiz and Exam System\\Online_Quiz_And_Exam_System\\Online_Quiz_And_Exam_System.csproj",
       "projectName": "Online_Quiz_And_Exam_System",
-      "projectPath": "D:\\CDAC IET\\Project\\Online Quiz and Exam System\\Online_Quiz_And_Exam_System\\Online_Quiz_And_Exam_System.csproj",
+      "projectPath": "D:\\CDAC IET\\DOTNET\\Lab\\ADO.NET\\Online Quiz and Exam System\\Online_Quiz_And_Exam_System\\Online_Quiz_And_Exam_System.csproj",
       "packagesPath": "C:\\Users\\Gaurav\\.nuget\\packages\\",
-      "outputPath": "D:\\CDAC IET\\Project\\Online Quiz and Exam System\\Online_Quiz_And_Exam_System\\obj\\",
+      "outputPath": "D:\\CDAC IET\\DOTNET\\Lab\\ADO.NET\\Online Quiz and Exam System\\Online_Quiz_And_Exam_System\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

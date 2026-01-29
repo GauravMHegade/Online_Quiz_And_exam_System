@@ -1,0 +1,16 @@
+﻿@{
+    ViewData["Title"] = "Start Test";
+}
+
+<nav>
+    <a href="/Home/Index">Home</a> |
+    <a href="/Account/Logout">Logout</a>
+</nav>
+
+<h2>Module Selected</h2>
+
+<form action="/Quiz/StartTest" method="get">
+    <input type="hidden" name="moduleId" value="@ViewBag.ModuleId" />
+    <button type="submit">Start Test</button>
+</form>
+

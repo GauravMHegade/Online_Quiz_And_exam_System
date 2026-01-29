@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Online_Quiz_And_Exam_System")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1620a44d03e6aa0c9c19475c0e857f29675de33b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d7779c216984906de220b6c3fdff4916efab68e4")]
 [assembly: System.Reflection.AssemblyProductAttribute("Online_Quiz_And_Exam_System")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Online_Quiz_And_Exam_System")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -13,7 +13,7 @@ const isValidEmail = (email) => {
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const nav = useNavigate(); 
+  const nav = useNavigate();
 
   // ================= NORMAL LOGIN =================
   const submit = async () => {
