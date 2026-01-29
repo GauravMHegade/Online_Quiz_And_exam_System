@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { loginUser, googleLogin } from "../services/api";
+import { loginUser } from "../services/api";
+import { googleLogin } from "../services/api";
+
+
 
 const isValidEmail = (email) => {
   return email.endsWith("@gmail.com");
 };
+
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -24,27 +28,34 @@ function Login() {
     }
 
     try {
-      const res = await loginUser({ email, password });
+      const res = await fetch("http://localhost:52705/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
 
-      // 🔐 loginUser already stores token + user
-      if (!res || !res.token) {
-        alert("Invalid email or password");
+      if (!res.ok) {
+        const error = await res.text();
+        alert(error);   // shows backend message
         return;
       }
 
-      nav("/"); // go to home
+      const user = await res.json();
+      sessionStorage.setItem("user", JSON.stringify(user));
+      nav("/");
+
     } catch (err) {
       alert("Server error. Please try again later.");
     }
   };
+
 
   // ================= GOOGLE LOGIN =================
   useEffect(() => {
     /* global google */
     if (window.google) {
       google.accounts.id.initialize({
-        client_id:
-          "942122630629-943dhruud3laaohl2hbv863sgs79e4dj.apps.googleusercontent.com",
+        client_id: "942122630629-943dhruud3laaohl2hbv863sgs79e4dj.apps.googleusercontent.com",
         callback: handleGoogleLogin
       });
 
@@ -69,34 +80,34 @@ function Login() {
       email: userObject.email
     };
 
-    const res = await googleLogin(googleUser);
+    const savedUser = await googleLogin(googleUser);
 
-    // 🔐 googleLogin already stores token + user
-    if (!res || !res.token) {
-      alert("Google login failed");
-      return;
-    }
-
+    sessionStorage.setItem("user", JSON.stringify(savedUser));
     nav("/");
   };
 
+
+  // return (
+  //   <div className="container mt-5">
   return (
     <div className="page-container">
+
       <div className="card col-md-5 mx-auto p-4 shadow">
         <h3 className="text-center mb-4">Login</h3>
 
+        {/* Email Login */}
         <input
           type="email"
           className="form-control mb-3"
           placeholder="Email"
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={e => setEmail(e.target.value)}
         />
 
         <input
           type="password"
           className="form-control mb-3"
           placeholder="Password"
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={e => setPassword(e.target.value)}
         />
 
         <button className="btn btn-primary w-100 mb-3" onClick={submit}>
@@ -105,10 +116,8 @@ function Login() {
 
         <div className="text-center mb-2 fw-bold">OR</div>
 
-        <div
-          id="googleLoginBtn"
-          className="d-flex justify-content-center"
-        ></div>
+        {/* Google Login Button */}
+        <div id="googleLoginBtn" className="d-flex justify-content-center"></div>
 
         <p className="text-center mt-3">
           New user? <Link to="/register">Register here</Link>

@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Online_Quiz_And_Exam_System.DAL;
 
 namespace Online_Quiz_And_Exam_System.Controllers
 {
-    [Authorize]
+
     [ApiController]
     [Route("api/mock")]
     public class MockController : ControllerBase

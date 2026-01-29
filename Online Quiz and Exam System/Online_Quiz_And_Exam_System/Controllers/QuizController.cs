@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Online_Quiz_API.DAL;
 
 namespace Online_Quiz_API.Controllers
@@ -15,7 +14,6 @@ namespace Online_Quiz_API.Controllers
             _dal = dal;
         }
 
-        [Authorize]
         [HttpGet("{moduleId}")]
         public IActionResult Start(int moduleId)
         {
@@ -24,7 +22,6 @@ namespace Online_Quiz_API.Controllers
         }
 
 
-        [AllowAnonymous]
         [HttpGet("demo/{moduleId}")]
         public IActionResult DemoPractice(int moduleId)
         {
